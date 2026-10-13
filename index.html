@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow"><title>Tanunchai_Family</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;700&family=Noto+Sans+Thai:wght@400;500;600&display=swap">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style id="css">
+/* Layout: ancestral wall. Tray of unplaced portraits on top, generations flow downward, detail sheet slides from the side (bottom on phones). */
+:root{
+  --bg:#ecece6; --surface:#f7f6f1; --ink:#1f2522; --muted:#66706a; --line:#b9bdb2;
+  --teak:#6a3b22; --brass:#9c7a2c; --focus:#2b5d57; --danger:#a0342b;
+  --serif:"Noto Serif Thai","Sarabun",Georgia,serif; --sans:"Noto Sans Thai","Sarabun",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141817; --surface:#1d2220; --ink:#e9e8e1; --muted:#9aa49d; --line:#3c4540;
+  --teak:#d29a76; --brass:#d0a94c; --focus:#6fb5ab; --danger:#e07a70; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141817; --surface:#1d2220; --ink:#e9e8e1; --muted:#9aa49d; --line:#3c4540;
+  --teak:#d29a76; --brass:#d0a94c; --focus:#6fb5ab; --danger:#e07a70; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:20px 48px}
+.wrap{max-width:1200px;margin:0 auto}
+header{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:flex-end;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid var(--line)}
+header>div{min-width:0}
+h1{margin:0;font-family:var(--serif);font-weight:700;font-size:clamp(26px,5vw,38px);line-height:1.2;text-wrap:balance}
+.sub{margin:4px 0 0;color:var(--muted);font-size:13px}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+button,select,input,textarea{font:inherit;color:inherit}
+.btn{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:7px 12px;cursor:pointer;font-size:13px}
+.btn:hover{border-color:var(--teak)}
+.btn.primary{background:var(--teak);border-color:var(--teak);color:var(--surface)}
+.btn.danger{color:var(--danger)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+h2{font-family:var(--serif);font-size:16px;margin:0 0 4px;font-weight:700}
+.note{color:var(--muted);font-size:13px;margin:0 0 12px}
+section{padding-block:20px}
+.tray{display:flex;flex-wrap:wrap;gap:12px}
+.mini{width:92px;background:var(--surface);border:1px solid var(--line);padding:4px;cursor:pointer;text-align:center;border-radius:3px}
+.mini .ph{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;background:var(--line)}
+.mini span{display:block;font-size:12px;line-height:1.3;padding-top:4px;color:var(--muted);overflow-wrap:anywhere}
+.mini.named span{color:var(--ink);font-weight:500}
+.mini.sel,.card.sel{outline:2px solid var(--focus);outline-offset:2px}
+.treebox{display:flex;align-items:flex-start;overflow-x:auto;border:1px solid var(--line);background:var(--surface);border-radius:4px;padding:20px 16px}
+.stage{position:relative;flex:none;margin:0 auto}
+.stage svg{position:absolute;inset:0;pointer-events:none}
+.stage svg path{stroke:var(--line);stroke-width:1.6;fill:none}
+.stage svg .sp{stroke:var(--brass);stroke-width:2}
+.stage svg .dash{stroke:var(--brass);stroke-dasharray:5 4}
+.card{position:absolute;width:132px;text-align:center;cursor:pointer;background:var(--bg);border:1px solid var(--brass);padding:5px;border-radius:2px}
+.card .ph{width:100%;height:150px;object-fit:cover;object-position:center top;display:block;background:var(--line)}
+.card b{display:block;font-family:var(--serif);font-size:14px;line-height:1.3;margin-top:6px;overflow-wrap:anywhere}
+.card small{display:block;color:var(--muted);font-size:11.5px;line-height:1.35;overflow-wrap:anywhere}
+.card.gone .ph{filter:grayscale(.55)}
+.empty{color:var(--muted);text-align:center;padding:36px 12px;font-size:14px}
+.blank{display:grid;place-items:center;font-family:var(--serif);font-size:34px;color:var(--muted)}
+.sheet{position:fixed;z-index:5;background:var(--surface);border:1px solid var(--line);box-shadow:0 8px 40px rgba(0,0,0,.25);overflow:auto;padding:16px;
+  right:0;top:0;bottom:0;width:min(360px,100%)}
+@media (max-width:640px){.sheet{top:auto;left:0;width:100%;max-height:78%;border-radius:12px 12px 0 0;padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}}
+.sheet[hidden]{display:none}
+.sheet .big{width:100%;max-height:300px;object-fit:contain;background:var(--bg);display:block;margin-bottom:12px;border:1px solid var(--line)}
+.sheet .row{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:10px}
+label{display:block;font-size:12px;color:var(--muted);margin:10px 0 3px;letter-spacing:.02em}
+input[type=text],select,textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:7px 9px;font-size:14px}
+textarea{min-height:76px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.foot{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:6px;font-size:13px;z-index:9}
+
+#saveState.dirty{color:var(--danger);font-weight:500}
+.btn:disabled{opacity:.6;cursor:default}
+.cam{position:fixed;inset:0;z-index:9;background:rgba(0,0,0,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:16px}
+.cam video{max-width:100%;max-height:70%;border-radius:6px;transform:scaleX(-1);background:#000}
+
+.dlg{background:var(--surface);color:var(--ink);padding:18px;border-radius:10px;width:min(340px,100%);border:1px solid var(--line)}
+.dlg input{margin:10px 0 4px}
+.ro{margin:0 0 8px;white-space:pre-wrap;overflow-wrap:anywhere}.ro b{display:block;font-size:12px;color:var(--muted);font-weight:400}
+.ruler{position:sticky;left:0;z-index:3;flex:none;width:78px;margin-right:12px;background:var(--surface);border-right:1px dashed var(--line)}
+.ruler .gen{position:absolute;left:0;right:6px;height:215px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border-top:1px solid var(--brass);padding-top:2px}
+.ruler .gen b{font-family:var(--serif);font-size:13px;color:var(--teak)}
+.ruler .gen small{font-size:10.5px;color:var(--muted);line-height:1.2;margin-top:4px}
+.ruler .gen span{font-size:13px;font-weight:600;line-height:1.25;overflow-wrap:anywhere}
+.ruler .gen.none span{font-size:11.5px;font-weight:400;color:var(--muted);margin-top:4px}
+body.pm{padding:24px 16px;background:#fff;overflow:hidden}
+body.pm .wrap{max-width:none;width:max-content}
+body.pm .actions,body.pm #trayWrap,body.pm #hint,body.pm .sheet,body.pm #stWrap,body.pm .toast{display:none!important}
+body.pm .treebox{overflow:visible;border:0}
+body.pm .ruler{position:relative}
+@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}.toast{display:none}}
+@media (max-width:640px){.ruler{width:62px;margin-right:8px}.ruler .gen b{font-size:12px}.ruler .gen span{font-size:12px}}
+</style></head><body>
+<div id="root"></div><aside class="sheet" id="sheet" hidden aria-label="ข้อมูลบุคคล"></aside>
+<script>/* Tanunchai_Family — shared family tree. Data + photos live in Supabase; writes go through password-checked functions. */
+const SB_URL="https://ebzlimiuwoqrghuxtiav.supabase.co";
+const SB_KEY="sb_publishable__2O6oYhADvubO649OlG3qw_Hg7qGk5F";
+const TITLE="Tanunchai_Family";
+const STATIC=new Set(["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "nmv0le7vk", "nmv0lewpj", "nmv0lhi1c", "nmv0mfph8", "nmv0mg22g", "nmv0mg7dp", "nmv0mij5x", "nmv0mk4jl", "nmv0mkjc1", "nmv0ml48e", "nmv0mlkb5", "nmv0mnm5g", "nmv0mwish", "nmv0mxzkh", "p1", "p2", "p3", "p4", "p5", "p6"]);
+
+const SHELL=`<div class="wrap">
+  <header>
+    <div>
+      <h1>${TITLE}</h1>
+      <p class="sub"><span id="count">กำลังโหลด…</span><span id="stWrap"> · <span id="saveState"></span></span></p>
+    </div>
+    <div class="actions" id="actions"></div>
+  </header>
+  <section id="trayWrap" hidden>
+    <h2>ยังไม่ได้จัดตำแหน่ง</h2>
+    <p class="note" id="trayNote"></p>
+    <div class="tray" id="tray"></div>
+  </section>
+  <section>
+    <h2>แผนผังครอบครัว</h2>
+    <p class="note" id="hint"></p>
+    <div class="treebox"><div class="ruler" id="ruler"></div><div class="stage" id="stage"></div></div>
+  </section>
+</div>`;
+const $=id=>document.getElementById(id);
+$("root").innerHTML=SHELL;
+document.title=TITLE;
+
+let S={people:[],photos:{},big:{}},sel=null,editable=false,PW="",lastLoad=0,loadErr=null,st="view";
+try{PW=localStorage.getItem("ft_pw")||""}catch(e){}
+const h=(t,a={},...k)=>{const e=document.createElement(t);for(const x in a){if(x==="class")e.className=a[x];else if(x.startsWith("on"))e.addEventListener(x.slice(2),a[x]);else e.setAttribute(x,a[x])}k.flat().forEach(c=>e.append(c));return e};
+const byId=id=>S.people.find(p=>p.id===id);
+const photo=p=>S.photos[p.id]||(STATIC.has(p.id)?"photos/"+p.id+".jpg":"");
+const label=p=>p.name||p.nick||(p.note&&p.note.match(/^รูปที่ \d+/)?p.note.match(/^รูปที่ \d+/)[0]:"ไม่ทราบชื่อ");
+function toast(t){const e=h("div",{class:"toast"},t);document.body.append(e);setTimeout(()=>e.remove(),2400)}
+function blank(p,cls){return h("div",{class:cls+" blank"},(p.name||p.nick||"?").charAt(0))}
+function img(p,cls){const s=photo(p);if(!s)return blank(p,cls);const e=h("img",{class:cls,src:s,alt:label(p),loading:"lazy"});e.addEventListener("error",()=>e.replaceWith(blank(p,cls)));return e}
+function mark(){
+  const b=$("saveState");if(!b)return;
+  const m={view:["ดูอย่างเดียว",""],saved:["บันทึกแล้ว",""],pending:["● รอบันทึก","dirty"],saving:["กำลังบันทึก…",""],error:["● บันทึกไม่สำเร็จ จะลองใหม่","dirty"]}[st]||["",""];
+  b.textContent=editable?m[0]:"ดูอย่างเดียว";b.className=editable?m[1]:"";
+}
+
+/* ---------- Supabase REST ---------- */
+async function api(path,opt={}){
+  const r=await fetch(SB_URL+"/rest/v1/"+path,{...opt,headers:{apikey:SB_KEY,"Content-Type":"application/json",...(opt.headers||{})}});
+  const tx=await r.text();
+  if(!r.ok){const e=new Error(tx||String(r.status));e.status=r.status;e.body=tx;throw e}
+  return tx?JSON.parse(tx):null;
+}
+const rpc=(fn,args)=>api("rpc/"+fn,{method:"POST",body:JSON.stringify(args)});
+const rowOf=p=>({id:p.id,name:p.name,nick:p.nick,born:p.born,died:p.died,note:p.note,parents:p.parents,spouse:p.spouse||"",ord:p.ord});
+
+async function load(){
+  try{
+    const rows=await api("people?select=*&order=ord.asc,id.asc");
+    S.people=rows.map(r=>({id:r.id,name:r.name||"",nick:r.nick||"",born:r.born||"",died:r.died||"",note:r.note||"",parents:r.parents||[],spouse:r.spouse||"",ord:r.ord}));
+    loadErr=null;lastLoad=Date.now();render();
+    const ph=await api("photos?select=id,thumb");
+    S.photos={};ph.forEach(r=>S.photos[r.id]=r.thumb);S.big={};
+    render();if(sel&&byId(sel)&&!editable)open(sel);
+  }catch(e){loadErr=e;render()}
+}
+
+/* ---------- saving ---------- */
+const pend=new Set();let timer=null,saving=false;
+function touch(...ps){ps.forEach(p=>p&&pend.add(p.id));st="pending";mark();clearTimeout(timer);timer=setTimeout(flush,600)}
+async function flush(){
+  if(!editable)return;
+  if(saving){timer=setTimeout(flush,400);return}
+  if(!pend.size)return;
+  const ids=[...pend];pend.clear();saving=true;st="saving";mark();
+  try{
+    await rpc("upsert_people",{pw:PW,payload:ids.map(byId).filter(Boolean).map(rowOf)});
+    st=pend.size?"pending":"saved";
+  }catch(e){ids.forEach(i=>pend.add(i));st="error";if(!fail(e))timer=setTimeout(flush,5000)}
+  saving=false;mark();
+  if(pend.size&&st!=="error")timer=setTimeout(flush,300);
+}
+function fail(e){
+  const b=String((e&&e.body)||(e&&e.message)||"");
+  if(b.includes("wrong_password")){lock(true);toast("รหัสผ่านไม่ถูกต้องหรือถูกเปลี่ยนแล้ว กรุณาปลดล็อกใหม่");return true}
+  toast("บันทึกไม่สำเร็จ"+(e&&e.status?" ("+e.status+")":"")+" ลองอีกครั้ง");return false;
+}
+window.addEventListener("beforeunload",e=>{if(pend.size||saving){e.preventDefault();e.returnValue=""}});
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden){if(pend.size)flush();return}
+  if(sel===null&&!pend.size&&!saving&&Date.now()-lastLoad>30000)load();
+});
+
+/* ---------- lock / unlock ---------- */
+function actions(){
+  const a=$("actions");a.replaceChildren();
+  if(editable){
+    a.append(h("button",{class:"btn primary",id:"add",onclick:addPerson},"+ เพิ่มคน"),h("button",{class:"btn",id:"copy",onclick:copyData},"คัดลอกข้อมูล"),h("button",{class:"btn",id:"lock",onclick:()=>lock(true)},"ล็อก"));
+  }else{
+    a.append(h("button",{class:"btn primary",id:"unlock",onclick:unlock},"แก้ไข (ใส่รหัสผ่าน)"),h("button",{class:"btn",id:"copy",onclick:copyData},"คัดลอกข้อมูล"));
+  }
+  a.append(h("button",{class:"btn",id:"print",onclick:printAll},"พิมพ์ / บันทึก PDF"));
+  $("hint").textContent=editable?"แตะที่คนเพื่อแก้ชื่อ รูป พ่อแม่ คู่สมรส และลำดับพี่น้อง ระบบบันทึกให้ทุกคนเห็นอัตโนมัติ":"แตะที่รูปเพื่อดูรายละเอียด ถ้าจะแก้ไขให้กดปุ่ม \"แก้ไข\" แล้วใส่รหัสผ่านของครอบครัว";
+  $("trayNote").textContent=editable?"แตะรูปเพื่อใส่ชื่อ วันเกิด และเลือกว่าเป็นลูกของใคร หรือแต่งงานกับใคร คนที่เชื่อมแล้วจะย้ายขึ้นไปอยู่ในแผนผังด้านล่างเอง":"คนที่ยังไม่ได้เชื่อมกับใครในแผนผัง";
+  mark();
+}
+function lock(clear){
+  editable=false;if(clear){PW="";try{localStorage.removeItem("ft_pw")}catch(e){}}
+  pend.clear();clearTimeout(timer);st="view";actions();if(sel)open(sel);else render();
+}
+async function checkPw(pw){try{return await rpc("check_pw",{pw})===true}catch(e){return null}}
+function askPw(){
+  return new Promise(res=>{
+    const inp=h("input",{type:"password",placeholder:"รหัสผ่านของครอบครัว",autocomplete:"current-password"});
+    const msg=h("p",{class:"note",style:"color:var(--danger);min-height:1.4em;margin:0"},"");
+    const ok=h("button",{class:"btn primary"},"ปลดล็อก"),no=h("button",{class:"btn"},"ยกเลิก");
+    const ov=h("div",{class:"cam"},h("div",{class:"dlg"},h("h2",{},"ใส่รหัสผ่านเพื่อแก้ไข"),inp,msg,h("div",{class:"foot"},ok,no)));
+    const done=v=>{ov.remove();res(v)};
+    const go=async()=>{
+      if(!inp.value)return;ok.disabled=true;ok.textContent="กำลังตรวจ…";
+      const r=await checkPw(inp.value);
+      if(r===true)return done(inp.value);
+      ok.disabled=false;ok.textContent="ปลดล็อก";
+      msg.textContent=r===false?"รหัสผ่านไม่ถูกต้อง":"ตรวจรหัสผ่านไม่ได้ (เชื่อมต่อฐานข้อมูลไม่สำเร็จ)";inp.select();
+    };
+    ok.addEventListener("click",go);no.addEventListener("click",()=>done(null));
+    inp.addEventListener("keydown",e=>{if(e.key==="Enter")go();if(e.key==="Escape")done(null)});
+    document.body.append(ov);setTimeout(()=>inp.focus(),0);
+  });
+}
+async function unlock(){
+  const pw=await askPw();if(!pw)return;
+  PW=pw;try{localStorage.setItem("ft_pw",pw)}catch(e){}
+  editable=true;st="saved";actions();if(sel)open(sel);else render();toast("ปลดล็อกแล้ว แก้ไขได้");
+}
+
+/* ---------- layout ---------- */
+const CW=132,SG=18,GAP=26,RH=250,CARD_H=215;
+function related(p){return p.parents.some(Boolean)||p.spouse||S.people.some(q=>q.parents.includes(p.id))}
+function ensureOrd(){let m=Math.max(-1,...S.people.map(p=>typeof p.ord==="number"?p.ord:-1));S.people.forEach(p=>{if(typeof p.ord!=="number")p.ord=++m})}
+function layout(){ensureOrd();
+  const ppl=S.people.filter(related);
+  const ids=new Set(ppl.map(p=>p.id));
+  const unitKey=p=>p.spouse&&ids.has(p.spouse)?[p.id,p.spouse].sort()[0]:p.id;
+  const units=new Map();
+  ppl.forEach(p=>{const k=unitKey(p);if(!units.has(k))units.set(k,{key:k,members:[]});units.get(k).members.push(p)});
+  units.forEach(u=>{u.members.sort((a,b)=>(a.parents.some(Boolean)?0:1)-(b.parents.some(Boolean)?0:1));u.kids=[];u.parent=null;u.pls=[]});
+  units.forEach(u=>{u.members.forEach(m=>{m.parents.forEach(id=>{const par=byId(id);if(!par||!ids.has(par.id))return;const pu=units.get(unitKey(par));if(pu&&pu!==u&&!u.pls.some(l=>l.pu===pu))u.pls.push({pu,member:m})})})});
+  const busy=new Set();
+  const dep=u=>{if(u.d!==undefined)return u.d;if(busy.has(u))return 0;busy.add(u);let d=0;u.pls.forEach(l=>{d=Math.max(d,dep(l.pu)+1)});busy.delete(u);u.d=d;return d};
+  units.forEach(dep);
+  for(let i=0;i<3;i++)units.forEach(u=>{if(u.pls.length)return;let m=Infinity;units.forEach(k=>{if(k.pls.some(l=>l.pu===u))m=Math.min(m,k.d)});if(m<Infinity&&m-1>u.d)u.d=m-1});
+  units.forEach(u=>{
+    if(!u.pls.length)return;
+    /* primary family = deepest parent unit; if tied, the one sharing the member's surname; then a stable id order (never the sibling order) */
+    const sur=p=>(p.name||"").trim().split(/\s+/).slice(1).join(" ");
+    const kin=l=>{const x=sur(l.member);return x&&l.pu.members.some(m=>m!==l.member&&sur(m)===x)?1:0};
+    const better=(l,a)=>l.pu.d!==a.pu.d?l.pu.d>a.pu.d:kin(l)!==kin(a)?kin(l)>kin(a):l.member.id<a.member.id;
+    const best=u.pls.reduce((a,l)=>better(l,a)?l:a,u.pls[0]);
+    u.parent=best.pu;u.anchor=best.member;u.sec=u.pls.filter(l=>l!==best);best.pu.kids.push(u);
+    u.members.sort((a,b)=>(b===u.anchor)-(a===u.anchor));
+  });
+  units.forEach(u=>u.kids.sort((a,b)=>a.anchor.ord-b.anchor.ord));
+  const roots=[...units.values()].filter(u=>!u.parent);
+  const seen=new Set(),placed=new Set();
+  const uw=u=>u.members.length*CW+(u.members.length-1)*SG;
+  function w(u){if(seen.has(u))return 0;seen.add(u);let kw=0;u.kids.forEach((k,i)=>{kw+=w(k)+(i?GAP:0)});u.w=Math.max(uw(u),kw);return u.w}
+  roots.forEach(w);
+  units.forEach(u=>{if(!seen.has(u)){u.parent=null;roots.push(u);w(u)}});
+  const pos=[],lines=[];let maxd=0;
+  function place(u,x){
+    if(placed.has(u))return;placed.add(u);
+    maxd=Math.max(maxd,u.d);
+    const own=uw(u),ox=x+(u.w-own)/2,y=u.d*RH;
+    u.members.forEach((m,i)=>{pos.push({p:m,x:ox+i*(CW+SG),y})});
+    if(u.members.length===2)lines.push({cls:"sp",d:`M${ox+CW} ${y+75}H${ox+CW+SG}`});
+    u.cx=ox+own/2;
+    let cx=x+(u.w-u.kids.reduce((a,k,i)=>a+k.w+(i?GAP:0),0))/2;
+    u.kids.forEach(k=>{place(k,cx);cx+=k.w+GAP});
+  }
+  let X=0;roots.forEach(r=>{place(r,X);X+=r.w+GAP*2});
+  const at=m=>pos.find(z=>z.p===m);
+  units.forEach(u=>{
+    if(!u.kids.length)return;
+    const y0=u.d*RH+CARD_H,ym=y0+(RH-CARD_H)/2+4,pc=u.cx;
+    lines.push({d:`M${pc} ${y0}V${ym}`});
+    const xs=u.kids.map(k=>at(k.anchor).x+CW/2);
+    lines.push({d:`M${Math.min(...xs,pc)} ${ym}H${Math.max(...xs,pc)}`});
+    u.kids.forEach((k,i)=>lines.push({d:`M${xs[i]} ${ym}V${k.d*RH}`}));
+  });
+  units.forEach(u=>{(u.sec||[]).forEach(l=>{
+    const q=at(l.member);if(!q||l.pu.cx===undefined)return;
+    const x1=l.pu.cx,y1=l.pu.d*RH+CARD_H,x2=q.x+CW/2,y2=u.d*RH;
+    lines.push({cls:"dash",d:`M${x1} ${y1}C${x1} ${y1+70},${x2} ${y2-70},${x2} ${y2}`});
+  })});
+  return {pos,lines,rows:maxd+1,width:Math.max(X-GAP*2,CW),height:(maxd+1)*RH-(RH-CARD_H)};
+}
+
+/* ---------- year ruler (left side) ---------- */
+function bornYear(p){
+  const m=((p.born||"").match(/(?<!\d)(1[89]\d\d|20\d\d|2[3-5]\d\d)(?!\d)/)||[])[1];
+  if(!m)return null;const y=+m;return y<2300?y+543:y;
+}
+function drawRuler(L){
+  const r=$("ruler");r.replaceChildren();
+  if(!L.pos.length){r.style.display="none";return}
+  r.style.display="";r.style.height=L.height+"px";
+  for(let d=0;d<L.rows;d++){
+    const ys=L.pos.filter(z=>Math.round(z.y/RH)===d).map(z=>bornYear(z.p)).filter(y=>y!==null);
+    const txt=ys.length?(Math.min(...ys)===Math.max(...ys)?String(Math.min(...ys)):Math.min(...ys)+"–"+Math.max(...ys)):"ไม่ทราบปี";
+    const e=h("div",{class:"gen"+(ys.length?"":" none")},h("b",{},"รุ่นที่ "+(d+1)),ys.length?h("small",{},"พ.ศ."):"",h("span",{},txt));
+    e.style.top=(d*RH)+"px";r.append(e);
+  }
+}
+
+/* ---------- render ---------- */
+const press=(f)=>({tabindex:"0",role:"button",onclick:f,onkeydown:e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();f()}}});
+function render(){
+  const tray=$("tray");tray.replaceChildren();
+  const st_=$("stage");st_.replaceChildren();
+  if(loadErr&&!S.people.length){
+    $("trayWrap").hidden=true;$("ruler").style.display="none";st_.style.width="auto";st_.style.height="auto";
+    st_.append(h("div",{class:"empty"},"โหลดข้อมูลไม่ได้ ("+(loadErr.status||"ไม่มีสัญญาณ")+") ตรวจอินเทอร์เน็ต หรือเช็คว่ารัน SQL ตั้งค่า Supabase แล้ว",h("br"),h("button",{class:"btn",style:"margin-top:10px",onclick:()=>{$("count").textContent="กำลังโหลด…";load()}},"ลองใหม่")));
+    $("count").textContent="โหลดไม่สำเร็จ";return;
+  }
+  const loose=S.people.filter(p=>!related(p));
+  loose.forEach(p=>tray.append(h("div",{class:"mini"+(p.name?" named":"")+(sel===p.id?" sel":""),"aria-label":label(p),...press(()=>open(p.id))},img(p,"ph"),h("span",{},label(p)))));
+  $("trayWrap").hidden=!loose.length;
+  const L=layout();
+  if(!L.pos.length){st_.style.width="auto";st_.style.height="auto";st_.append(h("div",{class:"empty"},"ยังไม่มีใครอยู่ในแผนผัง"));}
+  else{
+    st_.style.width=L.width+"px";st_.style.height=L.height+"px";
+    const ns="http://www.w3.org/2000/svg",svg=document.createElementNS(ns,"svg");svg.setAttribute("width",L.width);svg.setAttribute("height",L.height);
+    L.lines.forEach(l=>{const p=document.createElementNS(ns,"path");p.setAttribute("d",l.d);if(l.cls)p.setAttribute("class",l.cls);svg.append(p)});
+    st_.append(svg);
+    L.pos.forEach(({p,x,y})=>{
+      const dates=[p.born&&("เกิด "+p.born),p.died&&("ถึงแก่กรรม "+p.died)].filter(Boolean);
+      const c=h("div",{class:"card"+(sel===p.id?" sel":"")+(p.died?" gone":""),"aria-label":label(p),...press(()=>open(p.id))},
+        img(p,"ph"),h("b",{},label(p)),p.nick&&p.name?h("small",{},p.nick):"",...dates.map(d=>h("small",{},d)));
+      c.style.left=x+"px";c.style.top=y+"px";st_.append(c);
+    });
+  }
+  drawRuler(L);
+  $("count").textContent=S.people.length+" คน · ในแผนผัง "+L.pos.length+" คน";
+  mark();
+}
+
+/* ---------- detail sheet ---------- */
+function descendants(id){const out=new Set(),s=[id];while(s.length){const x=s.pop();S.people.forEach(p=>{if(p.parents.includes(x)&&!out.has(p.id)){out.add(p.id);s.push(p.id)}})}return out}
+function opts(selfId,val,skip){
+  const s=h("select",{});s.append(h("option",{value:""},"— ไม่ระบุ —"));
+  S.people.filter(p=>p.id!==selfId&&!(skip&&skip.has(p.id))).forEach(p=>{const o=h("option",{value:p.id},label(p));if(p.id===val)o.selected=true;s.append(o)});return s;
+}
+function field(lbl,key,p,type){
+  const inp=type==="area"?h("textarea",{id:"f_"+key}):h("input",{type:"text",id:"f_"+key});
+  inp.value=p[key]||"";inp.addEventListener("input",()=>{p[key]=inp.value;touch(p);render()});
+  return [h("label",{for:"f_"+key},lbl),inp];
+}
+function sibs(p){const g=S.people.filter(q=>q.id===p.id||q.parents.some(x=>p.parents.includes(x)));g.sort((a,b)=>a.ord-b.ord);return g}
+function moveSib(p,dir){const g=sibs(p),i=g.indexOf(p),o=g[i+dir];if(!o)return;const t=p.ord;p.ord=o.ord;o.ord=t;touch(p,o);render();open(p.id)}
+function shrink(im,max,q){const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*k));c.height=Math.max(1,Math.round(im.height*k));c.getContext("2d").drawImage(im,0,0,c.width,c.height);return c.toDataURL("image/jpeg",q)}
+async function loadBig(p,el){
+  if(S.big[p.id]||!S.photos[p.id])return;
+  try{const r=await api("photos?id=eq."+encodeURIComponent(p.id)+"&select=big");if(r&&r[0]){S.big[p.id]=r[0].big;if(sel===p.id&&el.isConnected)el.src=r[0].big}}catch(e){}
+}
+function info(lbl,val){return val?h("p",{class:"ro"},h("b",{},lbl),val):""}
+function open(id){
+  sel=id;const p=byId(id),sh=$("sheet");if(!p){close();return}
+  sh.replaceChildren();sh.hidden=false;
+  const bs=S.big[p.id]||photo(p);
+  sh.append(h("div",{class:"row"},h("h2",{},label(p)),h("button",{class:"btn",onclick:close,"aria-label":"ปิด"},"ปิด")));
+  if(bs){const big=h("img",{class:"big",src:bs,alt:label(p)});sh.append(big);loadBig(p,big)}
+  if(!editable){
+    const par=p.parents.map(byId).filter(Boolean).map(label).join(" และ ");
+    const kids=S.people.filter(q=>q.parents.includes(p.id)).sort((a,b)=>a.ord-b.ord).map(label).join(" · ");
+    const sp=p.spouse&&byId(p.spouse);
+    sh.append(info("ชื่อ-สกุล",p.name),info("ชื่อเล่น / คำเรียก",p.nick),info("เกิด",p.born),info("ถึงแก่กรรม",p.died),info("พ่อ / แม่",par),info("คู่สมรส",sp?label(sp):""),info("ลูก",kids),info("บันทึก / เรื่องราว",p.note));
+    sh.append(h("p",{class:"note",style:"margin-top:14px"},"ดูอย่างเดียว ถ้าจะแก้ไขให้กด \"แก้ไข\" ที่ด้านบนของหน้า"));
+    render();return;
+  }
+  const setImg=async im=>{
+    try{
+      const thumb=shrink(im,360,.78),big=shrink(im,640,.8);
+      toast("กำลังบันทึกรูป…");
+      await rpc("set_photo",{pw:PW,pid:p.id,thumb,big});
+      S.photos[p.id]=thumb;S.big[p.id]=big;open(p.id);render();toast("บันทึกรูปแล้ว");
+    }catch(e){fail(e)}
+  };
+  const fromFile=f=>{if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>setImg(im);im.src=r.result};r.readAsDataURL(f)};
+  const file=h("input",{type:"file",accept:"image/*",id:"f_file",style:"display:none"});
+  file.addEventListener("change",()=>fromFile(file.files[0]));
+  const cap=h("input",{type:"file",accept:"image/*",capture:"user",id:"f_cap",style:"display:none"});
+  cap.addEventListener("change",()=>fromFile(cap.files[0]));
+  sh.append(file,cap,h("div",{style:"display:flex;gap:8px;flex-wrap:wrap"},h("button",{class:"btn",onclick:()=>file.click()},"อัปโหลดรูป"),h("button",{class:"btn",onclick:()=>openCam(setImg,()=>cap.click())},"ถ่ายจากกล้อง")));
+  sh.append(...field("ชื่อ-สกุล","name",p),...field("ชื่อเล่น / คำเรียก (เช่น ยาย ปู่)","nick",p));
+  const d=h("div",{class:"two"});
+  const b=field("เกิด","born",p),dd=field("ถึงแก่กรรม","died",p);
+  d.append(h("div",{},...b),h("div",{},...dd));sh.append(d);
+  const par=h("div",{class:"two"});
+  const ds=descendants(p.id);
+  const a=opts(p.id,p.parents[0],ds),c=opts(p.id,p.parents[1],ds);
+  const upd=()=>{p.parents=[...new Set([a.value,c.value].filter(Boolean))];touch(p);render();open(p.id)};
+  a.addEventListener("change",upd);c.addEventListener("change",upd);a.id="f_p1";c.id="f_p2";
+  sh.append(h("p",{class:"note",style:"margin:14px 0 0"},"เลือกคนที่เป็นพ่อหรือแม่ของ "+label(p)+" (ไม่ใช่ลูก)"));
+  par.append(h("div",{},h("label",{for:"f_p1"},"พ่อ / แม่ คนที่ 1"),a),h("div",{},h("label",{for:"f_p2"},"พ่อ / แม่ คนที่ 2"),c));sh.append(par);
+  ensureOrd();
+  const sg=p.parents.length?sibs(p):[];
+  if(sg.length>1){
+    const si=sg.indexOf(p);
+    const chips=h("div",{style:"display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px"});
+    sg.forEach((q,n)=>chips.append(h("button",{class:"btn"+(q===p?" primary":""),style:"padding:3px 9px",onclick:()=>open(q.id)},(n+1)+". "+label(q))));
+    const lb=h("button",{class:"btn",id:"sib_l",onclick:()=>moveSib(p,-1)},"◀ ย้ายไปก่อน");
+    const rb=h("button",{class:"btn",id:"sib_r",onclick:()=>moveSib(p,1)},"ย้ายไปหลัง ▶");
+    if(si===0)lb.disabled=true;if(si===sg.length-1)rb.disabled=true;
+    sh.append(h("label",{},"ลำดับพี่น้อง (ซ้ายไปขวาในแผนผัง) · "+label(p)+" คนที่ "+(si+1)+" จาก "+sg.length),chips,h("div",{style:"display:flex;gap:8px;flex-wrap:wrap"},lb,rb));
+  }
+  const kids=S.people.filter(q=>q.parents.includes(p.id));
+  if(kids.length)sh.append(h("label",{},"ลูก "+kids.length+" คน (กำหนดจากหน้าของลูกแต่ละคน)"),h("div",{class:"note",style:"margin:0"},kids.map(label).join(" · ")));
+  const sp=opts(p.id,p.spouse);sp.id="f_sp";
+  sp.addEventListener("change",()=>{
+    const ch=[p];
+    if(p.spouse){const o=byId(p.spouse);if(o&&o.spouse===p.id){o.spouse="";ch.push(o)}}
+    p.spouse=sp.value;
+    if(p.spouse){const o=byId(p.spouse);if(o){if(o.spouse&&o.spouse!==p.id){const oo=byId(o.spouse);if(oo){oo.spouse="";ch.push(oo)}}o.spouse=p.id;ch.push(o)}}
+    touch(...ch);render();open(p.id)});
+  sh.append(h("label",{for:"f_sp"},"คู่สมรส"),sp,...field("บันทึก / เรื่องราว","note",p,"area"));
+  sh.append(h("div",{class:"foot"},h("button",{class:"btn danger",onclick:()=>del(p.id)},"ลบคนนี้")));
+  render();
+}
+async function openCam(done,fallback){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){toast("เบราว์เซอร์นี้เปิดกล้องไม่ได้ เลือกรูปที่ถ่ายไว้แทน");fallback();return}
+  let stream;
+  try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:1280}},audio:false})}
+  catch(e){toast("เปิดกล้องไม่ได้ ถ่ายรูปด้วยแอปกล้องแล้วอัปโหลดแทน");fallback();return}
+  const v=h("video",{autoplay:"",playsinline:""});v.muted=true;v.srcObject=stream;
+  const ov=h("div",{class:"cam"});
+  const stop=()=>{stream.getTracks().forEach(t=>t.stop());ov.remove()};
+  const shot=h("button",{class:"btn primary",onclick:()=>{if(!v.videoWidth)return;const c=document.createElement("canvas");c.width=v.videoWidth;c.height=v.videoHeight;c.getContext("2d").drawImage(v,0,0);stop();const im=new Image();im.onload=()=>done(im);im.src=c.toDataURL("image/jpeg",.9)}},"ถ่ายรูป");
+  ov.append(v,h("div",{style:"display:flex;gap:12px"},shot,h("button",{class:"btn",onclick:stop},"ยกเลิก")));
+  document.body.append(ov);
+}
+function close(){sel=null;$("sheet").hidden=true;render()}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&sel&&!document.querySelector(".cam"))close()});
+async function del(id){
+  const p=byId(id);if(!p||!confirm("ลบ "+label(p)+" ออกจากแผนผังถาวร?"))return;
+  try{await rpc("delete_person",{pw:PW,pid:id})}catch(e){fail(e);return}
+  pend.delete(id);
+  S.people=S.people.filter(q=>q.id!==id);delete S.photos[id];delete S.big[id];
+  S.people.forEach(q=>{q.parents=q.parents.filter(x=>x!==id);if(q.spouse===id)q.spouse=""});
+  close();toast("ลบแล้ว");
+}
+function addPerson(){
+  ensureOrd();const id="n"+Date.now().toString(36);
+  const p={id,name:"",nick:"",born:"",died:"",note:"",parents:[],spouse:"",ord:Math.max(-1,...S.people.map(x=>x.ord))+1};
+  S.people.push(p);touch(p);open(id);setTimeout(()=>$("f_name")&&$("f_name").focus(),0);
+}
+async function copyData(){
+  const data=JSON.stringify({title:TITLE,people:S.people.map(rowOf)},null,1);
+  try{await navigator.clipboard.writeText(data);toast("คัดลอกข้อมูลแล้ว")}catch(e){
+    const t=h("textarea",{style:"position:fixed;inset:20% 8% auto;height:50%;z-index:9;width:84%"});t.value=data;document.body.append(t);t.select();t.addEventListener("blur",()=>t.remove());toast("เลือกข้อความแล้ว กดคัดลอกเอง")}
+}
+
+/* ---------- print / save whole tree as one page ---------- */
+async function printAll(){
+  if(sel)close();
+  const root=document.documentElement,prev=root.getAttribute("data-theme");
+  root.setAttribute("data-theme","light");document.body.classList.add("pm");
+  const imgs=[...document.querySelectorAll("img")];
+  imgs.forEach(i=>{i.loading="eager"});
+  await Promise.all(imgs.map(i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r})));
+  const w=Math.ceil(root.scrollWidth)+4,hh=Math.ceil(root.scrollHeight)+4;
+  const stl=h("style",{id:"pgsize"});stl.textContent="@page{size:"+w+"px "+hh+"px;margin:0}";document.head.append(stl);
+  const done=()=>{document.body.classList.remove("pm");stl.remove();if(prev)root.setAttribute("data-theme",prev);else root.removeAttribute("data-theme");window.removeEventListener("afterprint",done)};
+  window.addEventListener("afterprint",done);
+  toast("ในหน้าต่างพิมพ์ เลือก \"บันทึกเป็น PDF\" (แนะนำ Chrome)");
+  setTimeout(()=>window.print(),400);
+}
+
+/* ---------- start ---------- */
+actions();render();
+load();
+if(PW)checkPw(PW).then(r=>{if(r===true){editable=true;st="saved";actions();if(sel)open(sel);else render()}else if(r===false){PW="";try{localStorage.removeItem("ft_pw")}catch(e){}}});
+</script></body></html>
