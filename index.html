@@ -300,6 +300,18 @@ function drawRuler(L){
   }
 }
 
+/* ---------- current age (shown after the name, living people only) ---------- */
+const MONTHS=[["มกราคม","ม.ค."],["กุมภาพันธ์","ก.พ."],["มีนาคม","มี.ค."],["เมษายน","เม.ย."],["พฤษภาคม","พ.ค."],["มิถุนายน","มิ.ย."],["กรกฎาคม","ก.ค."],["สิงหาคม","ส.ค."],["กันยายน","ก.ย."],["ตุลาคม","ต.ค."],["พฤศจิกายน","พ.ย."],["ธันวาคม","ธ.ค."]];
+function ageOf(p){
+  if(p.died)return null;
+  const y=bornYear(p);if(y===null)return null;
+  const now=new Date();let a=now.getFullYear()+543-y;
+  const s=p.born||"",mi=MONTHS.findIndex(m=>m.some(n=>s.includes(n))),dm=s.match(/(?:^|\s)(\d{1,2})(?=\s)/);
+  if(mi>=0&&dm&&now.getMonth()*100+now.getDate()<mi*100+(+dm[1]))a--;
+  return a>=0&&a<130?a:null;
+}
+const nm=p=>{const a=ageOf(p);return label(p)+(a===null?"":" ("+a+")")};
+
 /* ---------- render ---------- */
 const press=(f)=>({tabindex:"0",role:"button",onclick:f,onkeydown:e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();f()}}});
 function render(){
@@ -311,7 +323,7 @@ function render(){
     $("count").textContent="โหลดไม่สำเร็จ";return;
   }
   const loose=S.people.filter(p=>!related(p));
-  loose.forEach(p=>tray.append(h("div",{class:"mini"+(p.name?" named":"")+(sel===p.id?" sel":""),"aria-label":label(p),...press(()=>open(p.id))},img(p,"ph"),h("span",{},label(p)))));
+  loose.forEach(p=>tray.append(h("div",{class:"mini"+(p.name?" named":"")+(sel===p.id?" sel":""),"aria-label":label(p),...press(()=>open(p.id))},img(p,"ph"),h("span",{},nm(p)))));
   $("trayWrap").hidden=!loose.length;
   const L=layout();
   if(!L.pos.length){st_.style.width="auto";st_.style.height="auto";st_.append(h("div",{class:"empty"},"ยังไม่มีใครอยู่ในแผนผัง"));}
@@ -323,7 +335,7 @@ function render(){
     L.pos.forEach(({p,x,y})=>{
       const dates=[p.born&&("เกิด "+p.born),p.died&&("ถึงแก่กรรม "+p.died)].filter(Boolean);
       const c=h("div",{class:"card"+(sel===p.id?" sel":"")+(p.died?" gone":""),"aria-label":label(p),...press(()=>open(p.id))},
-        img(p,"ph"),h("b",{},label(p)),p.nick&&p.name?h("small",{},p.nick):"",...dates.map(d=>h("small",{},d)));
+        img(p,"ph"),h("b",{},nm(p)),p.nick&&p.name?h("small",{},p.nick):"",...dates.map(d=>h("small",{},d)));
       c.style.left=x+"px";c.style.top=y+"px";st_.append(c);
     });
   }
@@ -355,7 +367,7 @@ function open(id){
   sel=id;const p=byId(id),sh=$("sheet");if(!p){close();return}
   sh.replaceChildren();sh.hidden=false;
   const bs=S.big[p.id]||photo(p);
-  sh.append(h("div",{class:"row"},h("h2",{},label(p)),h("button",{class:"btn",onclick:close,"aria-label":"ปิด"},"ปิด")));
+  sh.append(h("div",{class:"row"},h("h2",{},nm(p)),h("button",{class:"btn",onclick:close,"aria-label":"ปิด"},"ปิด")));
   if(bs){const big=h("img",{class:"big",src:bs,alt:label(p)});sh.append(big);loadBig(p,big)}
   if(!editable){
     const par=p.parents.map(byId).filter(Boolean).map(label).join(" และ ");
