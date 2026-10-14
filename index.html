@@ -80,11 +80,22 @@ textarea{min-height:76px;resize:vertical}
 .ruler .gen.none span{font-size:11.5px;font-weight:400;color:var(--muted);margin-top:4px}
 body.pm{padding:24px 16px;background:#fff;overflow:hidden}
 body.pm .wrap{max-width:none;width:max-content}
-body.pm .actions,body.pm #trayWrap,body.pm #hint,body.pm .sheet,body.pm #stWrap,body.pm .toast{display:none!important}
+body.pm #searchBox,body.pm .actions,body.pm #trayWrap,body.pm #hint,body.pm .sheet,body.pm #stWrap,body.pm .toast{display:none!important}
 body.pm .treebox{overflow:visible;border:0}
 body.pm .ruler{position:relative}
 @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}.toast{display:none}}
 @media (max-width:640px){.ruler{width:62px;margin-right:8px}.ruler .gen b{font-size:12px}.ruler .gen span{font-size:12px}}
+.search{position:relative;margin-top:14px}
+.search input{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:9px 12px;font-size:15px}
+#qres{position:absolute;z-index:6;left:0;right:0;top:calc(100% + 4px);background:var(--surface);border:1px solid var(--line);border-radius:6px;box-shadow:0 8px 30px rgba(0,0,0,.2);max-height:60vh;overflow:auto}
+.qi{display:flex;gap:10px;align-items:center;padding:6px 10px;cursor:pointer}
+.qi:hover,.qi:focus{background:var(--bg)}
+.qi small{color:var(--muted)}
+.qph{width:34px;height:42px;object-fit:cover;object-position:center top;border-radius:2px;flex:none;background:var(--line);font-size:16px}
+.qnone{padding:10px 12px;color:var(--muted);font-size:13px}
+.card.dim,.mini.dim{opacity:.28}
+.hit{animation:hit 2.6s ease-out}
+@keyframes hit{0%,60%{outline:3px solid var(--focus);outline-offset:3px;box-shadow:0 0 0 8px rgba(43,93,87,.25)}100%{outline-color:transparent;box-shadow:none}}
 </style></head><body>
 <div id="root"></div><aside class="sheet" id="sheet" hidden aria-label="ข้อมูลบุคคล"></aside>
 <script>/* Ubolrat_Family — shared family tree. Data + photos live in Supabase; writes go through password-checked functions. */
@@ -101,6 +112,7 @@ const SHELL=`<div class="wrap">
     </div>
     <div class="actions" id="actions"></div>
   </header>
+  <div class="search" id="searchBox"><input id="q" type="search" placeholder="ค้นหาชื่อหรือชื่อเล่น" autocomplete="off" aria-label="ค้นหาคนในแผนผัง"><div id="qres" hidden></div></div>
   <section id="trayWrap" hidden>
     <h2>ยังไม่ได้จัดตำแหน่ง</h2>
     <p class="note" id="trayNote"></p>
@@ -312,6 +324,37 @@ function ageOf(p){
 }
 const nm=p=>{const a=ageOf(p);return label(p)+(a===null?"":" ("+a+")")};
 
+/* ---------- search ---------- */
+let Q="";
+const norm=s=>(s||"").toLowerCase().replace(/\s+/g," ").trim();
+function matches(p){if(!Q)return true;const hay=norm((p.name||"")+" "+(p.nick||""));return Q.split(" ").every(t=>hay.includes(t))}
+function runSearch(){
+  const box=$("qres");box.replaceChildren();
+  if(!Q){box.hidden=true;return}
+  const list=S.people.filter(matches);box.hidden=false;
+  if(!list.length){box.append(h("div",{class:"qnone"},"ไม่พบ \""+$("q").value.trim()+"\""));return}
+  list.slice(0,8).forEach(p=>box.append(h("div",{class:"qi",...press(()=>goTo(p.id))},img(p,"qph"),h("span",{},nm(p),p.nick&&p.name?h("small",{}," · "+p.nick):""))));
+  if(list.length>8)box.append(h("div",{class:"qnone"},"และอีก "+(list.length-8)+" คน พิมพ์เพิ่มเพื่อกรอง"));
+}
+function goTo(id){
+  $("qres").hidden=true;
+  const el=document.querySelector('[data-id="'+id+'"]');if(!el)return;
+  const tb=document.querySelector(".treebox");
+  if(el.classList.contains("card"))tb.scrollLeft=Math.max(0,el.getBoundingClientRect().left-tb.getBoundingClientRect().left+tb.scrollLeft-tb.clientWidth/2+66);
+  el.scrollIntoView({block:"center",behavior:"smooth"});
+  el.classList.add("hit");setTimeout(()=>el.classList.remove("hit"),2600);
+}
+(function(){
+  const q=$("q");
+  q.addEventListener("input",()=>{Q=norm(q.value);runSearch();render()});
+  q.addEventListener("focus",()=>{if(Q)runSearch()});
+  q.addEventListener("keydown",e=>{
+    if(e.key==="Enter"){const f=S.people.find(matches);if(Q&&f)goTo(f.id)}
+    if(e.key==="Escape"){q.value="";Q="";runSearch();render()}
+  });
+  document.addEventListener("click",e=>{if(!$("searchBox").contains(e.target))$("qres").hidden=true});
+})();
+
 /* ---------- render ---------- */
 const press=(f)=>({tabindex:"0",role:"button",onclick:f,onkeydown:e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();f()}}});
 function render(){
@@ -323,7 +366,7 @@ function render(){
     $("count").textContent="โหลดไม่สำเร็จ";return;
   }
   const loose=S.people.filter(p=>!related(p));
-  loose.forEach(p=>tray.append(h("div",{class:"mini"+(p.name?" named":"")+(sel===p.id?" sel":""),"aria-label":label(p),...press(()=>open(p.id))},img(p,"ph"),h("span",{},nm(p)))));
+  loose.forEach(p=>tray.append(h("div",{class:"mini"+(p.name?" named":"")+(sel===p.id?" sel":"")+(matches(p)?"":" dim"),"data-id":p.id,"aria-label":label(p),...press(()=>open(p.id))},img(p,"ph"),h("span",{},nm(p)))));
   $("trayWrap").hidden=!loose.length;
   const L=layout();
   if(!L.pos.length){st_.style.width="auto";st_.style.height="auto";st_.append(h("div",{class:"empty"},"ยังไม่มีใครอยู่ในแผนผัง"));}
@@ -334,7 +377,7 @@ function render(){
     st_.append(svg);
     L.pos.forEach(({p,x,y})=>{
       const dates=[p.born&&("เกิด "+p.born),p.died&&("ถึงแก่กรรม "+p.died)].filter(Boolean);
-      const c=h("div",{class:"card"+(sel===p.id?" sel":"")+(p.died?" gone":""),"aria-label":label(p),...press(()=>open(p.id))},
+      const c=h("div",{class:"card"+(sel===p.id?" sel":"")+(p.died?" gone":"")+(matches(p)?"":" dim"),"data-id":p.id,"aria-label":label(p),...press(()=>open(p.id))},
         img(p,"ph"),h("b",{},nm(p)),p.nick&&p.name?h("small",{},p.nick):"",...dates.map(d=>h("small",{},d)));
       c.style.left=x+"px";c.style.top=y+"px";st_.append(c);
     });
